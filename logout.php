@@ -1,19 +1,8 @@
 <?php
-require_once 'config/init.php';
-
-// Destroy all session data
-session_unset();
-session_destroy();
-
-// Clear session cookie
-if (isset($_COOKIE[session_name()])) {
-    setcookie(session_name(), '', time() - 3600, '/');
-}
-
-// Start new session for message
 session_start();
-setMessage('success', 'You have been logged out successfully');
+session_unset(); // Remove all session variables
+session_destroy(); // Destroy the session entirely
 
-// Redirect to home page
-redirect('index.php');
+header("Location: index.php"); // Send back to the public showroom
+exit;
 ?>

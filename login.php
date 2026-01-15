@@ -1,45 +1,23 @@
 <?php
-require_once 'config/init.php';
+session_start();
+require 'db_connection/db.php';
 
-// Redirect if logged in
-if (isLoggedIn()) {
-    redirect('dashboard.php');
-}
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $email = trim($_POST['email']); // safer than sanitize()
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $email = $_POST['email'];
     $password = $_POST['password'];
 
-    if (empty($email) || empty($password)) {
-        setMessage('danger', 'Please fill in all fields');
+    $stmt = $pdo->prepare("SELECT * FROM users WHERE email = ?");
+    $stmt->execute([$email]);
+    $user = $stmt->fetch();
+
+    if ($user && password_verify($password, $user['password_hash'])) {
+        $_SESSION['user_id'] = $user['id'];
+        $_SESSION['role'] = $user['role'];
+        $_SESSION['name'] = $user['full_name'];
+        header("Location: index.php"); // Redirect to home after login
+        exit;
     } else {
-
-        // FIX 1: Make sure the column names exist
-        $stmt = $db->prepare("SELECT * FROM users WHERE email = ? LIMIT 1");
-        $stmt->execute([$email]);
-        $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if ($user && password_verify($password, $user['password_hash'])) {   // FIX 2: match your real DB column
-            $_SESSION['user_id'] = $user['user_id'];
-            $_SESSION['username'] = $user['username'];
-            $_SESSION['email'] = $user['email'];
-            $_SESSION['full_name'] = $user['full_name'];
-            $_SESSION['user_type'] = $user['user_type'];
-
-            // Update login time
-            $db->prepare("UPDATE users SET last_login = NOW() WHERE user_id = ?")
-               ->execute([$user['user_id']]);
-
-            // Redirect
-            if ($user['user_type'] === 'admin') {
-                redirect('admin/index.php');
-            } else {
-                redirect('dashboard.php');
-            }
-
-        } else {
-            setMessage('danger', 'Invalid email or password');
-        }
+        $error = "Invalid credentials.";
     }
 }
 ?>
@@ -48,82 +26,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - <?php echo SITE_NAME; ?></title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="assets/css/style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="assets/style.css">
+    <title>FACUNDO | Staff Login</title>
 </head>
-<body>
-    <?php include 'includes/header.php'; ?>
-    
-    <section class="py-5">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-md-6 col-lg-5">
-                    <div class="card shadow">
-                        <div class="card-body p-5">
-                            <h2 class="text-center mb-4">Login</h2>
-                            
-                            <form method="POST" action="">
-                                <div class="mb-3">
-                                    <label class="form-label">Email Address</label>
-                                    <input type="email" name="email" class="form-control" required>
-                                </div>
-                                
-                                <div class="mb-3">
-                                    <label class="form-label">Password</label>
-                                    <input type="password" name="password" class="form-control" required>
-                                </div>
-                                
-                                <div class="mb-3 form-check">
-                                    <input type="checkbox" class="form-check-input" id="remember">
-                                    <label class="form-check-label" for="remember">Remember me</label>
-                                </div>
-                                
-                                <button type="submit" class="btn w-100 mb-3" style="background-color: #000; color: #fff; border: 2px solid #000; font-weight: 700; padding: 12px;">
-                                    <i class="fas fa-sign-in-alt me-2"></i>Login
-                                </button>
-                                
-                                <div class="text-center mb-3">
-                                    <a href="forgot-password.php" class="text-decoration-none">Forgot Password?</a>
-                                </div>
-                                
-                                <hr>
-                                
-                                <div class="d-grid gap-2 mb-3">
-                                    <button type="button" class="btn btn-outline-danger" onclick="loginWithGoogle()">
-                                        <i class="fab fa-google me-2"></i>Login with Google
-                                    </button>
-                                    <button type="button" class="btn btn-outline-primary" onclick="loginWithFacebook()">
-                                        <i class="fab fa-facebook me-2"></i>Login with Facebook
-                                    </button>
-                                </div>
-                                
-                                <p class="text-center mb-0">
-                                    Don't have an account? <a href="register.php">Register here</a>
-                                </p>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
+<body class="bg-[#0b0e14] flex items-center justify-center min-h-screen">
+    <div class="max-w-sm w-full p-8 bg-[#161b22] border border-gray-800 rounded-3xl shadow-2xl">
+        <div class="text-3xl font-black italic mb-8 text-center text-white">
+            FACU<span class="text-cyberlime">NDO</span>
         </div>
-    </section>
-    
-    <?php include 'includes/footer.php'; ?>
-    
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        function loginWithGoogle() {
-            alert('Google login integration coming soon!');
-            // Implement Google OAuth here
-        }
         
-        function loginWithFacebook() {
-            alert('Facebook login integration coming soon!');
-            // Implement Facebook OAuth here
-        }
-    </script>
+        <?php if(isset($_GET['error'])): ?>
+            <div class="bg-red-500/10 border border-red-500/20 p-3 rounded-xl mb-4 text-center">
+                <p class="text-red-500 text-[10px] font-bold uppercase tracking-widest">Access Denied: Invalid Credentials</p>
+            </div>
+        <?php endif; ?>
+
+        <form action="db_connection/login_handler.php" method="POST" class="space-y-4">
+            <div class="space-y-1">
+                <label class="text-[9px] font-bold text-gray-500 uppercase ml-2">Internal Email</label>
+                <input type="email" name="email" placeholder="admin@facundo.ph" class="input-facundo w-full" required>
+            </div>
+
+            <div class="space-y-1">
+                <label class="text-[9px] font-bold text-gray-500 uppercase ml-2">Password</label>
+                <input type="password" name="password" placeholder="••••••••" class="input-facundo w-full" required>
+            </div>
+
+            <button type="submit" class="w-full bg-cyberlime text-black font-black py-4 rounded-xl uppercase text-[10px] tracking-widest hover:bg-white transition-all duration-300 transform active:scale-95">
+                Enter Portal
+            </button>
+        </form>
+
+        <a href="index.php" class="block text-center mt-8 text-gray-500 text-[9px] font-bold uppercase tracking-widest hover:text-cyberlime transition-colors">
+            ← Back to Showroom
+        </a>
+    </div>
 </body>
 </html>

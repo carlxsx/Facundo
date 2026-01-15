@@ -1,0 +1,305 @@
+/* FACUNDO GLOBAL STYLES */
+
+:root {
+    --obsidian: #0b0e14;
+    --cyberlime: #ccff00;
+}
+
+body { 
+    background-color: var(--obsidian); 
+    color: #ffffff; 
+    font-family: 'Inter', sans-serif;
+    scroll-behavior: smooth;
+    margin: 0;
+}
+
+/* Color Helpers */
+.text-cyberlime { color: var(--cyberlime); }
+.bg-cyberlime { background-color: var(--cyberlime); }
+.border-cyberlime { border-color: var(--cyberlime); }
+
+/* Navigation Glass Effect */
+.nav-glass {
+    background-color: rgba(11, 14, 20, 0.8);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+/* Custom scrollbar for that premium feel */
+::-webkit-scrollbar { 
+    width: 8px; 
+}
+
+::-webkit-scrollbar-track { 
+    background: var(--obsidian); 
+}
+
+::-webkit-scrollbar-thumb { 
+    background: #1f2937; 
+    border-radius: 10px; 
+}
+
+::-webkit-scrollbar-thumb:hover { 
+    background: var(--cyberlime); 
+}
+
+/* Utility for smooth transitions */
+.transition-facundo {
+    transition: all 0.3s ease-in-out;
+}
+
+/* HERO SECTION STYLES */
+
+.hero-gradient {
+    background: radial-gradient(circle at 50% 50%, rgba(204, 255, 0, 0.05) 0%, rgba(11, 14, 20, 1) 100%);
+}
+
+.search-container {
+    background: rgba(22, 27, 34, 0.6);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.search-container:focus-within {
+    border-color: var(--cyberlime);
+    box-shadow: 0 0 20px rgba(204, 255, 0, 0.1);
+}
+
+.hero-title {
+    font-size: clamp(3rem, 10vw, 8rem);
+    line-height: 0.9;
+}
+
+/* SHOWROOM STYLES */
+
+.unit-card {
+    background: #161b22;
+    border: 1px solid #1f2937;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    overflow: hidden;
+}
+
+.unit-card:hover {
+    border-color: var(--cyberlime);
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(204, 255, 0, 0.05);
+}
+
+.unit-image-placeholder {
+    background: linear-gradient(45deg, #0b0e14, #1f2937);
+}
+
+.status-badge {
+    backdrop-filter: blur(4px);
+    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* STC MANAGEMENT STYLES */
+
+.stc-container {
+    background: #161b22;
+    border: 1px solid #1f2937;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.input-facundo {
+    background: #0b0e14;
+    border: 1px solid #374151;
+    color: white;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    outline: none;
+    transition: all 0.2s;
+}
+
+.input-facundo:focus {
+    border-color: var(--cyberlime);
+    box-shadow: 0 0 10px rgba(204, 255, 0, 0.1);
+}
+
+.stc-stat-card {
+    background: #0b0e14;
+    border-left: 3px solid var(--cyberlime);
+    padding: 1.5rem;
+    border-radius: 8px;
+}
+
+/* CRM PORTAL STYLES */
+
+.crm-table-container {
+    background: #161b22;
+    border: 1px solid #1f2937;
+    overflow: hidden;
+    border-radius: 16px;
+}
+
+.crm-row {
+    border-bottom: 1px solid #0b0e14;
+    transition: background 0.2s;
+}
+
+.crm-row:hover {
+    background: rgba(204, 255, 0, 0.02);
+}
+
+/* Lead Temperature Badges */
+.temp-hot { background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); }
+.temp-warm { background: rgba(204, 255, 0, 0.1); color: #ccff00; border: 1px solid rgba(204, 255, 0, 0.2); }
+.temp-cold { background: rgba(59, 130, 246, 0.1); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.2); }
+
+.badge-dot {
+    height: 6px;
+    width: 6px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 6px;
+}
+
+/* FINANCING STYLES */
+
+.finance-card {
+    background: linear-gradient(145deg, #161b22 0%, #0b0e14 100%);
+    border: 1px solid #1f2937;
+    position: relative;
+    overflow: hidden;
+}
+
+.finance-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--cyberlime), transparent);
+}
+
+.range-slider {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 4px;
+    background: #1f2937;
+    border-radius: 5px;
+    outline: none;
+}
+
+.range-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    background: var(--cyberlime);
+    cursor: pointer;
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(204, 255, 0, 0.5);
+}
+
+/* FOOTER STYLES */
+
+.footer-logo-bg {
+    font-size: 15vw;
+    line-height: 1;
+    background: linear-gradient(to bottom, #1f2937 0%, transparent 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    opacity: 0.1;
+}
+
+.footer-link {
+    color: #6b7280;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+}
+
+.footer-link:hover {
+    color: var(--cyberlime);
+    padding-left: 5px;
+}
+
+.back-to-top {
+    border: 1px solid #1f2937;
+    background: #0b0e14;
+    transition: all 0.3s;
+}
+
+.back-to-top:hover {
+    border-color: var(--cyberlime);
+    color: var(--cyberlime);
+}
+
+/* AUTH & ROLES */
+
+.role-badge {
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 9px;
+    font-weight: 900;
+    text-transform: uppercase;
+}
+
+.role-admin { background: #ccff00; color: #000; }
+.role-buyer { background: #3b82f6; color: #fff; }
+
+/* Dashboard Blur (for unauthorized) */
+.access-restricted {
+    filter: blur(8px);
+    pointer-events: none;
+    user-select: none;
+}
+
+.login-modal {
+    background: rgba(22, 27, 34, 0.95);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--cyberlime);
+}
+
+/* BUYER DASHBOARD STYLES */
+
+.status-step {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+}
+
+.step-line {
+    position: absolute;
+    top: 15px;
+    left: 50%;
+    width: 100%;
+    height: 2px;
+    background: #1f2937;
+    z-index: 1;
+}
+
+.step-circle {
+    width: 32px;
+    height: 32px;
+    background: #0b0e14;
+    border: 2px solid #1f2937;
+    border-radius: 50%;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+}
+
+.step-active .step-circle {
+    border-color: var(--cyberlime);
+    box-shadow: 0 0 15px rgba(204, 255, 0, 0.3);
+}
+
+.step-active .step-icon {
+    color: var(--cyberlime);
+}
+
