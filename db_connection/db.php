@@ -1,10 +1,17 @@
 <?php
 // db_connection/db.php
 
+<<<<<<< HEAD
 $host = 'localhost';
 $db   = 'facundo_db';
 $user = 'root'; // <--- CHANGE THIS (Remove @localhost)
 $pass = '';     // Default XAMPP password is empty
+=======
+$host = 'sql111.infinityfree.com';
+$db   = 'if0_40582828_facundo_db';
+$user = 'if0_40582828'; 
+$pass = '96aSE646qDTxd';
+>>>>>>> origin/main
 
 // 1. FORCE MANILA TIMEZONE (PHP Side)
 date_default_timezone_set('Asia/Manila');
